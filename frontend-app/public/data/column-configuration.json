@@ -1,0 +1,28 @@
+[
+  {
+    "displayName": "Name",
+    "key": "name",
+    "type": "string",
+    "visible": true
+  },
+  {
+    "displayName": "Age",
+    "key": "age",
+    "type": "number",
+    "visible": true
+  },
+  {
+    "displayName": "Joining Date",
+    "key": "joiningDate",
+    "type": "date",
+    "visible": true
+  },
+  {
+    "displayName": "Role",
+    "key": "role",
+    "type": "options",
+    "options": ["Admin", "User", "Viewer"],
+    "visible": true
+  }
+]
+  

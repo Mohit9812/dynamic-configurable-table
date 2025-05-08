@@ -1,0 +1,42 @@
+[
+  {
+      "name": "Alice Johnson",
+      "age": 34,
+      "joiningDate": "2023-01-10",
+      "role": "Admin"
+  },
+  {
+      "name": "Bob Smith",
+      "age": 28,
+      "role": "User"
+  },
+  {
+      "name": "Charlie Brown",
+      "joiningDate": "2021-03-20",
+      "role": "Manager"
+  },
+  {
+      "name": "Diana Prince",
+      "age": 30,
+      "joiningDate": "2020-11-05"
+  },
+  {
+      "name": "Eve Adams",
+      "age": 25
+  },
+  {
+      "name": "Frank Castle",
+      "joiningDate": "2019-09-12",
+      "role": "Admin"
+  },
+  {
+      "name": "Grace Hopper",
+      "age": 29,
+      "joiningDate": "2022-04-18",
+      "role": "Developer"
+  },
+  {
+      "name": "Hank Pym",
+      "role": "Scientist"
+  }
+]
