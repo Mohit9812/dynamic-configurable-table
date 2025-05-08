@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCell } from '../redux/tableSlice.js';
 import { applyFilters } from '../utils/filterUtils.js';
+import * as XLSX from 'xlsx'; // Import XLSX for Excel export
+import { saveAs } from 'file-saver'; // Import file-saver to save the Excel file
 import './Table.css';
 
 function Table() {
@@ -13,24 +15,68 @@ function Table() {
 
   const filteredData = applyFilters(data, filters);
 
-  // const handleCellChange = (rowIndex, key, value) => {
-  //   const originalRowIndex = data.findIndex((row) => row === filteredData[rowIndex]);
-  //   dispatch(updateCell({ rowIndex: originalRowIndex, key, value }));
-  // };
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5;
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const handleCellChange = (rowKey, key, value) => {
-    const rowIndex = data.findIndex(row => row.name === rowKey); // ← use actual key like id if possible
+    const rowIndex = data.findIndex(row => row.name === rowKey);
     if (rowIndex !== -1) {
       dispatch(updateCell({ rowIndex, key, value }));
     }
   };
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredData]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages]);
+
   if (!columns.length || !data.length) {
     return <div>Loading table...</div>;
   }
 
+  const exportToExcel = () => {
+    const exportData = filteredData.map((row) => {
+      const exportRow = {};
+      columns.forEach((col) => {
+        if (visibleColumns.includes(col.key)) {
+          exportRow[col.displayName] = row[col.key] || ''; // Use column display name as header
+        }
+      });
+      return exportRow;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Table Data');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'table-data.xlsx');
+  };
+
   return (
     <div className="table-container">
+      <div className="export-container">
+        <button onClick={exportToExcel} className="export-button">
+          Export to Excel
+        </button>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -42,7 +88,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((row, rowIndex) => (
+          {currentRows.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {columns
                 .filter((col) => visibleColumns.includes(col.key))
@@ -78,6 +124,18 @@ function Table() {
           ))}
         </tbody>
       </table>
+
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            className={currentPage === index + 1 ? 'active' : ''}
+            onClick={() => handlePageChange(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
