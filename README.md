@@ -107,3 +107,7 @@ A fully responsive, configurable data table SPA built with React and Redux Toolk
 │   ├── main.jsx
 │   └── index.css
 ```
+
+## 🪛 Extra Features
+- Pagination
+- Export Filtered Table as Excel
