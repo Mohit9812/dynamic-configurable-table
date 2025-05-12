@@ -8,8 +8,8 @@ A fully responsive, configurable data table SPA built with React and Redux Toolk
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/configurable-table-spa.git
-   cd configurable-table-spa
+   git clone https://github.com/Mohit9812/dynamic-configurable-table.git
+   cd dynamic-configurable-table/frontend-app
    ```
 
 2. **Install dependencies**:
